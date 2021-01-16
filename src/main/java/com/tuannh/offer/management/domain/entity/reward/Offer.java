@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
-public abstract class Reward {
+public abstract class Offer {
     private final String content;
 }

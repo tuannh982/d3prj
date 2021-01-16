@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public abstract class BaseEvent {
+public abstract class DomainEvent {
     private final String eventName;
     private final long ts;
 }
