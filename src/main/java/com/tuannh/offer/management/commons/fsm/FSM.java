@@ -6,11 +6,11 @@ import com.tuannh.offer.management.commons.tuple.Tuple3;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FSM {
-    private final Map<Tuple2<FsmState, FsmEvent>, FsmState> transitionTable;
-    private final Map<Tuple3<FsmState, FsmEvent, FsmState>, FsmTransitionEntry> executors;
+public abstract class FSM {
+    protected final Map<Tuple2<FsmState, FsmEvent>, FsmState> transitionTable;
+    protected final Map<Tuple3<FsmState, FsmEvent, FsmState>, FsmTransitionEntry> executors;
 
-    public FSM(FsmTransitionEntry... entries) {
+    protected FSM(FsmTransitionEntry... entries) {
         transitionTable = new HashMap<>();
         executors = new HashMap<>();
         for (FsmTransitionEntry entry : entries) {
@@ -19,13 +19,5 @@ public class FSM {
         }
     }
 
-    public void transition(FsmEntity entity, FsmEvent event) {
-        FsmState newState = transitionTable.get(Tuple2.of(entity.state(), event));
-        if (newState == null) {
-            throw new IllegalStateException();
-        }
-        FsmTransitionEntry entry = executors.get(Tuple3.of(entity.state(), event, newState));
-        entity.changeState(newState);
-        entry.handle(entity);
-    }
+    public abstract void transition(FsmEntity entity, FsmEvent event);
 }
