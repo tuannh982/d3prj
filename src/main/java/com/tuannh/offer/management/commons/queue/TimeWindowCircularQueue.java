@@ -8,8 +8,6 @@ public class TimeWindowCircularQueue {
     private static final TimeUnit BASE_UNIT = TimeUnit.SECONDS;
 
     private final int size;
-    private final int window;
-    private final TimeUnit timeUnit;
 
     // dt
     private long lastTs;
@@ -21,8 +19,6 @@ public class TimeWindowCircularQueue {
         if (timeUnit != TimeUnit.HOURS && timeUnit != TimeUnit.MINUTES && timeUnit != TimeUnit.SECONDS) { // forced timeunit here
             throw new IllegalArgumentException();
         }
-        this.window = window;
-        this.timeUnit = timeUnit;
         this.size = (int)timeUnit.toSeconds(window);
         internalQueue = new int[this.size];
         lastTs = System.currentTimeMillis();

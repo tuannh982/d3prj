@@ -1,17 +1,24 @@
 package com.tuannh.offer.management.domain.policy.event.transaction.freqcap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tuannh.offer.management.commons.assertion.Assertions;
 import com.tuannh.offer.management.commons.queue.TimeWindowCircularQueue;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class FreqCapPolicy extends TransactionEventPolicy<TransactionEvent, Boolean> {
+    @Getter
+    @JsonIgnore
     private final int windowInSecond;
+    @Getter
+    @JsonIgnore
     private final int limit;
+    @JsonIgnore
     private final TimeWindowCircularQueue cq;
 
     public FreqCapPolicy(int argc, @NonNull Object[] args) {

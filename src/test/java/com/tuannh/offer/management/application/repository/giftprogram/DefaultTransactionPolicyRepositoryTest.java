@@ -1,33 +1,42 @@
-package com.tuannh.offer.management.domain.policy.event.transaction;
+package com.tuannh.offer.management.application.repository.giftprogram;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tuannh.offer.management.App;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
-import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
-import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
-import org.junit.jupiter.api.Test;
+import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings("java:S2925")
-class TransactionPolicyFactoryTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        classes = App.class
+)
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-test.properties")
+public class DefaultTransactionPolicyRepositoryTest {
+    @Autowired
+    private DefaultTransactionPolicyRepository repository;
+
     @Test
-    void createFraudPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        // mock policy
+    public void getPolicyTestNo1() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, JsonProcessingException {
+        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#1");
+        // mock data
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
         );
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
-                "fraud",
-                1,
-                new Object[] {
-                        new FraudPolicy.ConditionArgs("user_condition", 1, new Object[] {bannedList})
-                });
-        // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e1", "1", "TEST0", new Date()),
                 new TransactionEvent("e1", "2", "TEST1", new Date()),
@@ -48,13 +57,8 @@ class TransactionPolicyFactoryTest {
     }
 
     @Test
-    void createFreqCapPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InterruptedException {
-        // policy
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
-                "freq_cap",
-                2,
-                new Object[] {5, 2} // limit 5 transactions / 2s
-        );
+    public void getPolicyTestNo2() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, InterruptedException {
+        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#2");
         // data
         long baseTs = System.currentTimeMillis();
         long baseTsAndHalf = baseTs + 500;
@@ -99,42 +103,8 @@ class TransactionPolicyFactoryTest {
     }
 
     @Test
-    void createChainPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        // mock policy
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
-                "chain",
-                2,
-                new Object[] {new ChainPolicy.PolicyArgs(
-                        "fraud",
-                        2,
-                        new Object[] {
-                                new FraudPolicy.ConditionArgs(
-                                        "user_condition",
-                                        1,
-                                        new Object[] {Arrays.asList("1", "2", "3")}
-                                ),
-                                new FraudPolicy.ConditionArgs(
-                                        "event_condition",
-                                        1,
-                                        new Object[] {Arrays.asList("e0", "e1")}
-                                )
-                        }
-                ), new ChainPolicy.PolicyArgs(
-                        "fraud",
-                        2,
-                        new Object[] {new FraudPolicy.ConditionArgs(
-                                "user_condition",
-                                1,
-                                new Object[] {Arrays.asList("5", "8")}
-                        ),
-                                new FraudPolicy.ConditionArgs(
-                                        "event_condition",
-                                        1,
-                                        new Object[] {Collections.singletonList("e99")}
-                                )
-                        }
-                )}
-        );
+    public void getPolicyTestNo3() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#3");
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e0", "1", "TEST4", new Date()),

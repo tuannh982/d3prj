@@ -6,7 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TimeWindowCircularQueueTest {
+@SuppressWarnings("java:S2925")
+class TimeWindowCircularQueueTest {
     @Test
     void circularQueueTest() throws InterruptedException {
         TimeWindowCircularQueue queue = new TimeWindowCircularQueue(2, TimeUnit.SECONDS);

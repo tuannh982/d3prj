@@ -1,37 +1,27 @@
 package com.tuannh.offer.management.domain.policy.event.transaction.fraud;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.ConditionArgumentTransactionEventPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicyCondition;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FraudPolicy extends TransactionEventPolicy<TransactionEvent, Boolean> {
+public class FraudPolicy extends ConditionArgumentTransactionEventPolicy {
+    @JsonIgnore
     private final List<TransactionEventPolicyCondition<TransactionEvent>> conditions;
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    public static class ConditionArgs {
-        private String conditionName;
-        private int argc;
-        private Object[] args;
-    }
 
     public FraudPolicy(int argc, @NonNull Object[] args) {
         super(argc, args);
         conditions = new ArrayList<>();
         for (int i = 0; i < argc; i++) {
-            FraudPolicy.ConditionArgs temp = (FraudPolicy.ConditionArgs) args[i];
+            ConditionArgs temp = (ConditionArgs) args[i];
             conditions.add(FraudConditionFactory.of(
-                    temp.conditionName,
-                    temp.argc,
-                    temp.args
+                    temp.getConditionName(),
+                    temp.getArgc(),
+                    temp.getArgs()
             ));
         }
     }

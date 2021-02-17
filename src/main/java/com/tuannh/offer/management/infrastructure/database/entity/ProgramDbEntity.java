@@ -1,6 +1,5 @@
 package com.tuannh.offer.management.infrastructure.database.entity;
 
-import com.tuannh.offer.management.domain.entity.reward.Reward;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
