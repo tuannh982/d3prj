@@ -2,6 +2,7 @@ package com.tuannh.offer.management.domain.event;
 
 import lombok.Getter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class TransactionEvent extends DomainEvent {
     private final String userId;
     private final Map<String, Object> properties;
 
-    public TransactionEvent(String eventName, String userId, String eventId, long timestamp) {
+    public TransactionEvent(String eventName, String userId, String eventId, Date timestamp) {
         super(eventName);
         properties = new HashMap<>();
         properties.put("timestamp", timestamp);

@@ -15,7 +15,7 @@ public class Tuple2<A0, A1> implements Tuple {
 
     @Override
     public Object get(int index) {
-        Assertions.inRangeCheck(index, 0, 2);
+        Assertions.inRangeChecks(index, 0, 2);
         switch (index) {
             case 0:
                 return a0;
