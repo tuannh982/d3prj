@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "staff")
+@Table(name = "staffs")
 public class StaffDbEntity {
     @Id
     @Column(name = "staff_id")

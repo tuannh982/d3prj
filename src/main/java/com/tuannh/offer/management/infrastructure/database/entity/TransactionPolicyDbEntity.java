@@ -22,8 +22,8 @@ public class TransactionPolicyDbEntity {
     @Id
     @Column(name = "policy_id")
     private String policyId;
-    @Column(name = "policy_class")
-    private String policyClass;
+    @Column(name = "policy_name")
+    private String policyName;
     @Column(name = "n_arguments")
     private Integer numberOfArguments;
     @Column(name = "arguments")

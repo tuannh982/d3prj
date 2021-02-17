@@ -3,7 +3,6 @@ package com.tuannh.offer.management.domain.policy.event.transaction.fraud;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicyCondition;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionPolicyFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

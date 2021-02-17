@@ -33,8 +33,8 @@ public class ProgramDbEntity {
     private Date programEffectiveFrom;
     @Column(name = "program_effective_to")
     private Date programEffectiveTo;
-    @Column(name = "policy")
-    private String policy;
+    @Column(name = "policy_id")
+    private String policyId;
     @Column(name = "max_reward_per_user")
     private Integer maxRewardPerUser;
     @Column(name = "reward_list")
