@@ -21,7 +21,7 @@ public class ChainPolicy extends TransactionEventPolicy<TransactionEvent, Boolea
     public static class PolicyArgs {
         private String policyName;
         private int argc;
-        private Object[] argv;
+        private Object[] args;
     }
 
     public ChainPolicy(int argc, @NonNull Object[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -32,7 +32,7 @@ public class ChainPolicy extends TransactionEventPolicy<TransactionEvent, Boolea
             policies.add(TransactionPolicyFactory.of(
                     temp.policyName,
                     temp.argc,
-                    temp.argv
+                    temp.args
             ));
         }
     }

@@ -7,11 +7,11 @@ import lombok.NonNull;
 
 public abstract class TransactionEventPolicy<T extends TransactionEvent, R extends Boolean> extends EventPolicy<T, R> {
     protected int argc;
-    protected Object[] argv;
+    protected Object[] args;
 
-    protected TransactionEventPolicy(int argc, @NonNull Object[] argv) {
-        Assertions.equalChecks(argc, argv.length);
+    protected TransactionEventPolicy(int argc, @NonNull Object[] args) {
+        Assertions.equalChecks(argc, args.length);
         this.argc = argc;
-        this.argv = argv;
+        this.args = args;
     }
 }

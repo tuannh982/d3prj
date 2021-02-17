@@ -14,11 +14,11 @@ public class FreqCapPolicy extends TransactionEventPolicy<TransactionEvent, Bool
     private final int limit;
     private final TimeWindowCircularQueue cq;
 
-    public FreqCapPolicy(int argc, @NonNull Object[] argv) {
-        super(argc, argv);
+    public FreqCapPolicy(int argc, @NonNull Object[] args) {
+        super(argc, args);
         Assertions.equalChecks(argc, 2);
-        limit = (int) argv[0];
-        windowInSecond = (int) argv[1];
+        limit = (int) args[0];
+        windowInSecond = (int) args[1];
         cq = new TimeWindowCircularQueue(windowInSecond, TimeUnit.SECONDS);
     }
 

@@ -2,10 +2,12 @@ package com.tuannh.offer.management.domain.policy.event.transaction;
 
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +21,12 @@ public class TransactionPolicyFactoryTest {
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
         );
+        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
+                "fraud",
+                1,
+                new Object[] {
+                        new FraudPolicy.ConditionArgs("user_condition", 1, new Object[] {bannedList})
+                });
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e1", "1", "TEST0", new Date()),
@@ -32,7 +40,6 @@ public class TransactionPolicyFactoryTest {
                 new TransactionEvent("e1", "9", "TEST4", new Date()),
                 new TransactionEvent("e1", "10", "TEST4", new Date())
         };
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of("fraud", 1, new Object[] {bannedList});
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
             final boolean bx = !bannedList.contains(event.getUserId());
@@ -99,35 +106,57 @@ public class TransactionPolicyFactoryTest {
                 2,
                 new Object[] {new ChainPolicy.PolicyArgs(
                         "fraud",
-                        1,
-                        new Object[] {Arrays.asList("1", "2", "3")}
+                        2,
+                        new Object[] {
+                                new FraudPolicy.ConditionArgs(
+                                        "user_condition",
+                                        1,
+                                        new Object[] {Arrays.asList("1", "2", "3")}
+                                ),
+                                new FraudPolicy.ConditionArgs(
+                                        "event_condition",
+                                        1,
+                                        new Object[] {Arrays.asList("e0", "e1")}
+                                )
+                        }
                 ), new ChainPolicy.PolicyArgs(
                         "fraud",
-                        1,
-                        new Object[] {Arrays.asList("5", "8")}
+                        2,
+                        new Object[] {new FraudPolicy.ConditionArgs(
+                                "user_condition",
+                                1,
+                                new Object[] {Arrays.asList("5", "8")}
+                        ),
+                                new FraudPolicy.ConditionArgs(
+                                        "event_condition",
+                                        1,
+                                        new Object[] {Collections.singletonList("e99")}
+                                )
+                        }
                 )}
         );
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
-                new TransactionEvent("e1", "1", "TEST0", new Date()),
+                new TransactionEvent("e0", "1", "TEST4", new Date()),
                 new TransactionEvent("e1", "2", "TEST1", new Date()),
-                new TransactionEvent("e1", "3", "TEST2", new Date()),
-                new TransactionEvent("e1", "4", "TEST3", new Date()),
-                new TransactionEvent("e1", "5", "TEST4", new Date()),
-                new TransactionEvent("e1", "6", "TEST4", new Date()),
-                new TransactionEvent("e1", "7", "TEST4", new Date()),
-                new TransactionEvent("e1", "8", "TEST4", new Date()),
-                new TransactionEvent("e1", "9", "TEST4", new Date()),
-                new TransactionEvent("e1", "10", "TEST4", new Date())
+                new TransactionEvent("e2", "3", "TEST6", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+                new TransactionEvent("e4", "5", "TEST2", new Date()),
+                new TransactionEvent("e1", "6", "TEST0", new Date()),
+                new TransactionEvent("e5", "7", "TEST0", new Date()),
+                new TransactionEvent("e4", "8", "TEST4", new Date()),
+                new TransactionEvent("e8", "9", "TEST4", new Date()),
+                new TransactionEvent("e0", "10", "TEST0", new Date()),
+                new TransactionEvent("e99", "102", "TEST0", new Date())
         };
-        List<String> bannedList = Arrays.asList(
-                "1", "2", "3", "5", "8"
-        );
+        List<String> bannedUsers = Arrays.asList("1", "2", "3", "5", "8");
+        List<String> bannedEvents = Arrays.asList("e0", "e1", "e99");
         // process
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
-            final boolean bx = !bannedList.contains(event.getUserId());
-            assertEquals(b, bx, String.format("wrong evaluation on user %s%n", event.getUserId()));
+            final boolean bx = !bannedUsers.contains(event.getUserId());
+            final boolean by = !bannedEvents.contains(event.getEventName());
+            assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUserId()));
         }
     }
 }

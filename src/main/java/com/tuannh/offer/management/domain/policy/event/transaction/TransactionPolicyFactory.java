@@ -40,7 +40,7 @@ public class TransactionPolicyFactory {
         }
     }
 
-    public static TransactionEventPolicy<TransactionEvent, Boolean> of(String policyName, int argc, Object[] argv) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static TransactionEventPolicy<TransactionEvent, Boolean> of(String policyName, int argc, Object[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<? extends TransactionEventPolicy<TransactionEvent, Boolean>> clazz = TransactionPolicyEnum.getClass(policyName);
         Constructor<? extends TransactionEventPolicy<TransactionEvent, Boolean>> constructor = null;
         TransactionEventPolicy<TransactionEvent, Boolean> instance = null;
@@ -49,7 +49,7 @@ public class TransactionPolicyFactory {
             instance = constructor.newInstance();
         } else {
             constructor = clazz.getConstructor(int.class, Object[].class);
-            instance = constructor.newInstance(argc, argv);
+            instance = constructor.newInstance(argc, args);
         }
         return instance;
     }
