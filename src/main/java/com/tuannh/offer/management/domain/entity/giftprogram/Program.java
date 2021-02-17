@@ -3,6 +3,7 @@ package com.tuannh.offer.management.domain.entity.giftprogram;
 import com.tuannh.offer.management.commons.fsm.FsmEntity;
 import com.tuannh.offer.management.commons.fsm.FsmState;
 import com.tuannh.offer.management.domain.entity.reward.Reward;
+import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,19 +29,19 @@ public class Program implements FsmEntity {
     private final String partnerCode;
     private final Date programEffectiveFrom;
     private final Date programEffectiveTo;
-    private final TransactionEventPolicy policy;
+    private final TransactionEventPolicy<TransactionEvent, Boolean> policy;
     private final Integer maxRewardPerUser;
     private final List<Reward> rewardList;
     // state
-    private FsmState currentStatus;
+    private ProgramFsmState currentStatus;
 
     @Override
-    public FsmState state() {
+    public ProgramFsmState state() {
         return currentStatus;
     }
 
     @Override
     public void changeState(FsmState newState) {
-        currentStatus = newState;
+        currentStatus = (ProgramFsmState) newState;
     }
 }

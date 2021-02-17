@@ -1,14 +1,17 @@
 package com.tuannh.offer.management.domain.entity.giftprogram;
 
 import com.tuannh.offer.management.commons.fsm.FsmEvent;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProgramStateTransitionEvent {
-    public static final String STRING_APPROVE = "approve_program";
-    public static final String STRING_REFUSE = "refuse_program";
+@AllArgsConstructor
+public enum ProgramStateTransitionEvent implements FsmEvent {
+    APPROVE("approve_program"),
+    REFUSE("refuse_program");
 
-    public static final FsmEvent APPROVE = () -> STRING_APPROVE;
-    public static final FsmEvent REFUSE = () -> STRING_REFUSE;
+    private final String value;
+
+    @Override
+    public String value() {
+        return value;
+    }
 }

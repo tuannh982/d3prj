@@ -18,4 +18,5 @@ public class Reward {
     private final String rewardCode;
     private final Date rewardEffectiveFrom;
     private final Date rewardEffectiveTo;
+    private final boolean used;
 }

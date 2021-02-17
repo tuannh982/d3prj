@@ -1,16 +1,17 @@
 package com.tuannh.offer.management.domain.entity.giftprogram;
 
 import com.tuannh.offer.management.commons.fsm.FsmState;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProgramFsmState {
-    public static final String STRING_CREATED = "program_created";
-    public static final String STRING_APPROVED = "program_approved";
-    public static final String STRING_REFUSED = "program_refused";
+@AllArgsConstructor
+public enum ProgramFsmState implements FsmState {
+    CREATED("program_created"),
+    APPROVED("program_approved"),
+    REFUSED("program_refused");
+    private final String value;
 
-    public static final FsmState CREATED = () -> STRING_CREATED;
-    public static final FsmState APPROVED = () -> STRING_APPROVED;
-    public static final FsmState REFUSED = () -> STRING_REFUSED;
+    @Override
+    public String value() {
+        return value;
+    }
 }

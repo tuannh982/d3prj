@@ -4,7 +4,7 @@ import com.tuannh.offer.management.commons.fsm.DefaultFsm;
 import com.tuannh.offer.management.commons.fsm.FsmTransitionEntry;
 
 public class ProgramFsm extends DefaultFsm {
-    private static final FsmTransitionEntry[] transitionTable = new FsmTransitionEntry[] {
+    private static final FsmTransitionEntry[] transitionEntries = new FsmTransitionEntry[] {
             new FsmTransitionEntry(
                     ProgramFsmState.CREATED,
                     ProgramStateTransitionEvent.APPROVE,
@@ -18,6 +18,6 @@ public class ProgramFsm extends DefaultFsm {
     };
 
     public ProgramFsm() {
-        super(transitionTable);
+        super(transitionEntries);
     }
 }
