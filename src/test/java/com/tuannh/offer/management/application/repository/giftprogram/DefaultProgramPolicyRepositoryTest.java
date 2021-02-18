@@ -2,7 +2,9 @@ package com.tuannh.offer.management.application.repository.giftprogram;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tuannh.offer.management.App;
+import com.tuannh.offer.management.domain.entity.giftprogram.ProgramPolicy;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
+import com.tuannh.offer.management.domain.exception.giftprogram.ProgramPolicyException;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,13 +28,14 @@ import static org.junit.jupiter.api.Assertions.*;
 )
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class DefaultTransactionPolicyRepositoryTest {
+public class DefaultProgramPolicyRepositoryTest {
     @Autowired
-    private DefaultTransactionPolicyRepository repository;
+    private DefaultProgramPolicyRepository repository;
 
     @Test
-    public void getPolicyTestNo1() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, JsonProcessingException {
-        TransactionEventPolicy policy = repository.getPolicy("policy#1");
+    public void getPolicyTestNo1() throws ProgramPolicyException {
+        ProgramPolicy policy = null;
+        policy = repository.getPolicy("policy#1");
         // mock data
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
@@ -58,8 +61,9 @@ public class DefaultTransactionPolicyRepositoryTest {
 
     @SuppressWarnings("java:S2925")
     @Test
-    public void getPolicyTestNo2() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, InterruptedException {
-        TransactionEventPolicy policy = repository.getPolicy("policy#2");
+    public void getPolicyTestNo2() throws ProgramPolicyException, InterruptedException {
+        ProgramPolicy policy = null;
+        policy = repository.getPolicy("policy#2");
         // data
         long baseTs = System.currentTimeMillis();
         long baseTsAndHalf = baseTs + 500;
@@ -104,8 +108,9 @@ public class DefaultTransactionPolicyRepositoryTest {
     }
 
     @Test
-    public void getPolicyTestNo3() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        TransactionEventPolicy policy = repository.getPolicy("policy#3");
+    public void getPolicyTestNo3() throws ProgramPolicyException {
+        ProgramPolicy policy = null;
+        policy = repository.getPolicy("policy#3");
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e0", "1", "TEST4", new Date()),

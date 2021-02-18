@@ -2,6 +2,7 @@ package com.tuannh.offer.management.domain.service;
 
 import com.tuannh.offer.management.domain.entity.giftprogram.Program;
 import com.tuannh.offer.management.domain.entity.giftprogram.ProgramFsmState;
+import com.tuannh.offer.management.domain.entity.giftprogram.ProgramPolicy;
 import com.tuannh.offer.management.domain.entity.reward.Reward;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import com.tuannh.offer.management.domain.repository.giftprogram.ProgramRepository;
@@ -24,7 +25,7 @@ public class DefaultProgramService implements ProgramService {
             String partnerCode,
             Date programEffectiveFrom,
             Date programEffectiveTo,
-            TransactionEventPolicy policy,
+            ProgramPolicy policy,
             Integer maxRewardPerUser,
             List<Reward> rewardList
     ) {

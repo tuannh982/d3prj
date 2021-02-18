@@ -28,7 +28,7 @@ public class Program implements FsmEntity {
     private final String partnerCode;
     private final Date programEffectiveFrom;
     private final Date programEffectiveTo;
-    private final TransactionEventPolicy policy;
+    private final ProgramPolicy policy;
     private final Integer maxRewardPerUser;
     private final List<Reward> rewardList;
     // state
