@@ -83,20 +83,20 @@ public class TransactionPolicyFactory {
                 );
                 instance = constructor.newInstance(argc, conditionArgs);
             } else if (ClassUtils.isAssignable(clazz, PolicyArgumentTransactionEventPolicy.class)) {
-                constructor = clazz.getConstructor(List.class); // list of policy
+                constructor = clazz.getConstructor(TransactionEventPolicy[].class);
                 PolicyArgumentTransactionEventPolicy.PolicyJsonArgs[] policyJsonArgs = JSON_MAPPER.readValue(
                         args, PolicyArgumentTransactionEventPolicy.PolicyJsonArgs[].class
                 );
-                List<TransactionEventPolicy> policies = new ArrayList<>(argc);
+                TransactionEventPolicy[] policies = new TransactionEventPolicy[argc];
                 for (int i = 0; i < argc; i++) {
                     // recursive here
-                    policies.add(i, ofJsonString(
+                    policies[i] = ofJsonString(
                             policyJsonArgs[i].getPolicyName(),
                             policyJsonArgs[i].getArgc(),
                             JSON_MAPPER.writeValueAsString(policyJsonArgs[i].getArgs())
-                    ));
+                    );
                 }
-                instance = constructor.newInstance(policies);
+                instance = constructor.newInstance((Object) policies);
             } else {
                 constructor = clazz.getConstructor(int.class, Object[].class);
                 Object[] objectArgs = JSON_MAPPER.readValue(args, Object[].class);

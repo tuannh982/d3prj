@@ -16,15 +16,15 @@ public class ChainPolicy extends PolicyArgumentTransactionEventPolicy {
     @JsonIgnore
     private final List<TransactionEventPolicy> policies;
 
-    public ChainPolicy(@NonNull List<TransactionEventPolicy> policies) {
-        super(policies);
-        this.policies = policies;
-    }
-
     public ChainPolicy(@NonNull TransactionEventPolicy[] policies) {
         super(policies);
         this.policies = new ArrayList<>();
         this.policies.addAll(Arrays.asList(policies).subList(0, argc));
+    }
+
+    public ChainPolicy(@NonNull List<TransactionEventPolicy> policies) {
+        super(policies);
+        this.policies = policies;
     }
 
     public ChainPolicy(int argc, @NonNull Object[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
