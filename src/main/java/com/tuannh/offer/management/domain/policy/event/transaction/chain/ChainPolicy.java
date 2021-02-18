@@ -9,11 +9,23 @@ import lombok.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChainPolicy extends PolicyArgumentTransactionEventPolicy {
     @JsonIgnore
     private final List<TransactionEventPolicy<TransactionEvent, Boolean>> policies;
+
+    public ChainPolicy(@NonNull List<TransactionEventPolicy<TransactionEvent, Boolean>> policies) {
+        super(policies);
+        this.policies = policies;
+    }
+
+    public ChainPolicy(@NonNull TransactionEventPolicy<TransactionEvent, Boolean>[] policies) {
+        super(policies);
+        this.policies = new ArrayList<>();
+        this.policies.addAll(Arrays.asList(policies).subList(0, argc));
+    }
 
     public ChainPolicy(int argc, @NonNull Object[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super(argc, args); // error should be occurred here
