@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "java:S1192"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -56,7 +56,7 @@ public class JsonArgs {
         return jsonNode.has("marker");
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S1199"})
     public static Object fromBaseClass(JsonNode jsonNode, Class optClass) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (optClass != null && optClass != Map.class && optClass != List.class) {
             return JSON_MAPPER.treeToValue(jsonNode, optClass);

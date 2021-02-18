@@ -26,7 +26,7 @@ public class CustomerPropertiesCondition extends TransactionEventPolicyCondition
         for (Map.Entry<String, Condition> entry : props.entrySet()) {
             Map<String, Object> customerProps = data.getUser().getDemographicData();
             Object value = customerProps.get(entry.getKey());
-            boolean b = entry.getValue().evaluate((Comparable) value);
+            boolean b = entry.getValue().evaluate(value);
             if (!b) {
                 return false;
             }
