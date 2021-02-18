@@ -32,7 +32,7 @@ public class DefaultTransactionPolicyRepositoryTest {
 
     @Test
     public void getPolicyTestNo1() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, JsonProcessingException {
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#1");
+        TransactionEventPolicy policy = repository.getPolicy("policy#1");
         // mock data
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
@@ -58,7 +58,7 @@ public class DefaultTransactionPolicyRepositoryTest {
 
     @Test
     public void getPolicyTestNo2() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, InterruptedException {
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#2");
+        TransactionEventPolicy policy = repository.getPolicy("policy#2");
         // data
         long baseTs = System.currentTimeMillis();
         long baseTsAndHalf = baseTs + 500;
@@ -104,7 +104,7 @@ public class DefaultTransactionPolicyRepositoryTest {
 
     @Test
     public void getPolicyTestNo3() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = repository.getPolicy("policy#3");
+        TransactionEventPolicy policy = repository.getPolicy("policy#3");
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e0", "1", "TEST4", new Date()),

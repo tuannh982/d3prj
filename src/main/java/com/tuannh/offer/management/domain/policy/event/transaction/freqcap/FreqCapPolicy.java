@@ -11,7 +11,7 @@ import lombok.NonNull;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class FreqCapPolicy extends TransactionEventPolicy<TransactionEvent, Boolean> {
+public class FreqCapPolicy extends TransactionEventPolicy {
     @Getter
     @JsonIgnore
     private final int windowInSecond;

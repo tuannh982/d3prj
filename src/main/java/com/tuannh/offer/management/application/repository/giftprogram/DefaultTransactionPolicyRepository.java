@@ -21,7 +21,7 @@ public class DefaultTransactionPolicyRepository implements TransactionPolicyRepo
     }
 
     @Override
-    public TransactionEventPolicy<TransactionEvent, Boolean> getPolicy(String id)
+    public TransactionEventPolicy getPolicy(String id)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         Optional<TransactionPolicyDbEntity> optionalEntity = transactionPolicyDbEntityRepository.findById(id);
         if (optionalEntity.isPresent()) {

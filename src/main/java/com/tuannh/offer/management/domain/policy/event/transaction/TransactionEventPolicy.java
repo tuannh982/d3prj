@@ -5,7 +5,7 @@ import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.EventPolicy;
 import lombok.NonNull;
 
-public abstract class TransactionEventPolicy<T extends TransactionEvent, R extends Boolean> extends EventPolicy<T, R> {
+public abstract class TransactionEventPolicy extends EventPolicy<TransactionEvent, Boolean> {
     protected int argc;
     protected Object[] args;
 

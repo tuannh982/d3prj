@@ -9,7 +9,7 @@ import lombok.NonNull;
 
 import java.util.List;
 
-public abstract class PolicyArgumentTransactionEventPolicy extends TransactionEventPolicy<TransactionEvent, Boolean> {
+public abstract class PolicyArgumentTransactionEventPolicy extends TransactionEventPolicy {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
@@ -28,11 +28,11 @@ public abstract class PolicyArgumentTransactionEventPolicy extends TransactionEv
         private JsonNode args;
     }
 
-    protected PolicyArgumentTransactionEventPolicy(@NonNull TransactionEventPolicy<TransactionEvent, Boolean>[] policies) {
+    protected PolicyArgumentTransactionEventPolicy(@NonNull TransactionEventPolicy[] policies) {
         super(policies.length, policies);
     }
 
-    protected PolicyArgumentTransactionEventPolicy(@NonNull List<TransactionEventPolicy<TransactionEvent, Boolean>> policies) {
+    protected PolicyArgumentTransactionEventPolicy(@NonNull List<TransactionEventPolicy> policies) {
         super(policies.size(), policies.toArray());
     }
 

@@ -25,7 +25,7 @@ public class DefaultProgramService implements ProgramService {
             String partnerCode,
             Date programEffectiveFrom,
             Date programEffectiveTo,
-            TransactionEventPolicy<TransactionEvent, Boolean> policy,
+            TransactionEventPolicy policy,
             Integer maxRewardPerUser,
             List<Reward> rewardList
     ) {

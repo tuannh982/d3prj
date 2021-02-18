@@ -7,5 +7,5 @@ import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEv
 import java.lang.reflect.InvocationTargetException;
 
 public interface TransactionPolicyRepository {
-    TransactionEventPolicy<TransactionEvent, Boolean> getPolicy(String id) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException;
+    TransactionEventPolicy getPolicy(String id) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException;
 }

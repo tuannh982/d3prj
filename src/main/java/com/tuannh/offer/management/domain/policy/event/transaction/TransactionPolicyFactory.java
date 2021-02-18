@@ -30,7 +30,7 @@ public class TransactionPolicyFactory {
         FREQ_CAP("freq_cap", FreqCapPolicy.class),
         CHAIN("chain", ChainPolicy.class);
         private final String value;
-        private final Class<? extends TransactionEventPolicy<TransactionEvent, Boolean>> clazz;
+        private final Class<? extends TransactionEventPolicy> clazz;
 
         private static final Map<String, TransactionPolicyEnum> mp;
         static {
@@ -40,7 +40,7 @@ public class TransactionPolicyFactory {
             }
         }
 
-        public static Class<? extends TransactionEventPolicy<TransactionEvent, Boolean>> getClass(String policyName) {
+        public static Class<? extends TransactionEventPolicy> getClass(String policyName) {
             TransactionPolicyEnum e = mp.get(policyName);
             if (e == null) {
                 throw new IllegalStateException();
@@ -57,10 +57,10 @@ public class TransactionPolicyFactory {
         }
     }
 
-    public static TransactionEventPolicy<TransactionEvent, Boolean> of(String policyName, int argc, Object[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<? extends TransactionEventPolicy<TransactionEvent, Boolean>> clazz = TransactionPolicyEnum.getClass(policyName);
-        Constructor<? extends TransactionEventPolicy<TransactionEvent, Boolean>> constructor = null;
-        TransactionEventPolicy<TransactionEvent, Boolean> instance = null;
+    public static TransactionEventPolicy of(String policyName, int argc, Object[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<? extends TransactionEventPolicy> clazz = TransactionPolicyEnum.getClass(policyName);
+        Constructor<? extends TransactionEventPolicy> constructor = null;
+        TransactionEventPolicy instance = null;
         if (argc == 0) {
             constructor = clazz.getConstructor();
             instance = constructor.newInstance();
@@ -71,10 +71,10 @@ public class TransactionPolicyFactory {
         return instance;
     }
 
-    public static TransactionEventPolicy<TransactionEvent, Boolean> ofJsonString(String policyName, int argc, String args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, JsonProcessingException {
-        Class<? extends TransactionEventPolicy<TransactionEvent, Boolean>> clazz = TransactionPolicyEnum.getClass(policyName);
-        Constructor<? extends TransactionEventPolicy<TransactionEvent, Boolean>> constructor = null;
-        TransactionEventPolicy<TransactionEvent, Boolean> instance = null;
+    public static TransactionEventPolicy ofJsonString(String policyName, int argc, String args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, JsonProcessingException {
+        Class<? extends TransactionEventPolicy> clazz = TransactionPolicyEnum.getClass(policyName);
+        Constructor<? extends TransactionEventPolicy> constructor = null;
+        TransactionEventPolicy instance = null;
         if (argc == 0) {
             constructor = clazz.getConstructor();
             instance = constructor.newInstance();
@@ -90,7 +90,7 @@ public class TransactionPolicyFactory {
                 PolicyArgumentTransactionEventPolicy.PolicyJsonArgs[] policyJsonArgs = JSON_MAPPER.readValue(
                         args, PolicyArgumentTransactionEventPolicy.PolicyJsonArgs[].class
                 );
-                List<TransactionEventPolicy<TransactionEvent, Boolean>> policies = new ArrayList<>(argc);
+                List<TransactionEventPolicy> policies = new ArrayList<>(argc);
                 for (int i = 0; i < argc; i++) {
                     // recursive here
                     policies.add(i, ofJsonString(

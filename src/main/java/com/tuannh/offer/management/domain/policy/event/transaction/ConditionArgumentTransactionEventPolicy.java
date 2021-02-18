@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-public abstract class ConditionArgumentTransactionEventPolicy extends TransactionEventPolicy<TransactionEvent, Boolean> {
+public abstract class ConditionArgumentTransactionEventPolicy extends TransactionEventPolicy {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter

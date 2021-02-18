@@ -21,7 +21,7 @@ class TransactionPolicyFactoryTest {
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
         );
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
+        TransactionEventPolicy policy = TransactionPolicyFactory.of(
                 "fraud",
                 1,
                 new Object[] {
@@ -50,7 +50,7 @@ class TransactionPolicyFactoryTest {
     @Test
     void createFreqCapPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InterruptedException {
         // policy
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
+        TransactionEventPolicy policy = TransactionPolicyFactory.of(
                 "freq_cap",
                 2,
                 new Object[] {5, 2} // limit 5 transactions / 2s
@@ -101,7 +101,7 @@ class TransactionPolicyFactoryTest {
     @Test
     void createChainPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         // mock policy
-        TransactionEventPolicy<TransactionEvent, Boolean> policy = TransactionPolicyFactory.of(
+        TransactionEventPolicy policy = TransactionPolicyFactory.of(
                 "chain",
                 2,
                 new Object[] {new ChainPolicy.PolicyArgs(
