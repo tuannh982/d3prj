@@ -56,6 +56,7 @@ public class DefaultTransactionPolicyRepositoryTest {
         }
     }
 
+    @SuppressWarnings("java:S2925")
     @Test
     public void getPolicyTestNo2() throws JsonProcessingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, InterruptedException {
         TransactionEventPolicy policy = repository.getPolicy("policy#2");

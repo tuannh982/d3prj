@@ -1,7 +1,6 @@
 package com.tuannh.offer.management.domain.policy.event.transaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tuannh.offer.management.domain.event.TransactionEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

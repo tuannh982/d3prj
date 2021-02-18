@@ -3,7 +3,6 @@ package com.tuannh.offer.management.domain.entity.giftprogram;
 import com.tuannh.offer.management.commons.fsm.FsmEntity;
 import com.tuannh.offer.management.commons.fsm.FsmState;
 import com.tuannh.offer.management.domain.entity.reward.Reward;
-import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

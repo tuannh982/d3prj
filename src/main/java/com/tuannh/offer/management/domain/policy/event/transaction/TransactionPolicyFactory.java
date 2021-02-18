@@ -2,7 +2,6 @@ package com.tuannh.offer.management.domain.policy.event.transaction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.freqcap.FreqCapPolicy;
@@ -11,10 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ClassUtils;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
