@@ -22,13 +22,21 @@ public class FreqCapPolicy extends TransactionEventPolicy {
     private final TimeWindowCircularQueue cq;
 
     public FreqCapPolicy(int argc, @NonNull Object[] args) {
-        super(argc, args);
+        super(argc, args, new Class[] {int.class, int.class});
         Assertions.equalChecks(argc, 2);
         limit = (int) args[0];
         windowInSecond = (int) args[1];
         cq = new TimeWindowCircularQueue(windowInSecond, TimeUnit.SECONDS);
     }
 
+    public FreqCapPolicy(int argc, @NonNull Object[] args, @NonNull Class[] argsType) {
+        super(argc, args, argsType);
+        Assertions.equalChecks(int.class, argsType[0]);
+        Assertions.equalChecks(int.class, argsType[1]);
+        limit = (int) args[0];
+        windowInSecond = (int) args[1];
+        cq = new TimeWindowCircularQueue(windowInSecond, TimeUnit.SECONDS);
+    }
 
     @Override
     public Boolean handle(TransactionEvent data) {

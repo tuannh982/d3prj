@@ -1,5 +1,6 @@
 package com.tuannh.offer.management.commons.condition;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public enum Operator {
     GE(">="),
     LE("<=");
 
+    @JsonValue
     private final String value;
 
     private static final Map<String, Operator> map;

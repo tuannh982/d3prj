@@ -11,7 +11,7 @@ public class Assertions {
         }
     }
 
-    public static void equalChecks(int l, int r) {
+    public static <T> void equalChecks(T l, T r) {
         if (l != r) {
             throw new IllegalStateException();
         }

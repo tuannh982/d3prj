@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -130,6 +131,47 @@ public class DefaultProgramPolicyRepositoryTest {
             final boolean bx = !bannedUsers.contains(event.getUser().getUserId());
             final boolean by = !bannedEvents.contains(event.getEventName());
             assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUser().getUserId()));
+        }
+    }
+
+    @Test
+    public void getPolicyTestNo4() throws ProgramPolicyException {
+        ProgramPolicy policy = null;
+        policy = repository.getPolicy("policy#4");
+        // mock data
+        TransactionEvent[] events = new TransactionEvent[] {
+                new TransactionEvent("e0", "1", "TEST4", new Date()),
+                new TransactionEvent("e1", "2", "TEST1", new Date()),
+                new TransactionEvent("e2", "3", "TEST6", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+        };
+        // force update data
+        for (TransactionEvent event : events) {
+            event.getUser().setDemographicData(new HashMap<>());
+        }
+        events[0].getUser().getDemographicData().put("gender", "male");
+        events[1].getUser().getDemographicData().put("gender", "female");
+        events[2].getUser().getDemographicData().put("gender", "male");
+        events[3].getUser().getDemographicData().put("gender", "male");
+        events[4].getUser().getDemographicData().put("gender", "male");
+        events[5].getUser().getDemographicData().put("gender", "male");
+
+        events[0].getUser().getDemographicData().put("age", 24);
+        events[1].getUser().getDemographicData().put("age", 25);
+        events[2].getUser().getDemographicData().put("age", 26);
+        events[3].getUser().getDemographicData().put("age", 27);
+        events[4].getUser().getDemographicData().put("age", 28);
+        events[5].getUser().getDemographicData().put("age", 21);
+        for (TransactionEvent event : events) {
+            final boolean b = policy.handle(event);
+            assertEquals(
+                    b,
+                    "male".equals(event.getUser().getDemographicData().get("gender")) &&
+                            25 <= (Integer) event.getUser().getDemographicData().get("age"),
+                    String.format("wrong evaluation on user %s%n", event.getUser().getUserId())
+            );
         }
     }
 }

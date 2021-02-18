@@ -3,10 +3,8 @@ package com.tuannh.offer.management.domain.policy.event.transaction.chain;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.PolicyArgumentTransactionEventPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionPolicyFactory;
 import lombok.NonNull;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class ChainPolicy extends PolicyArgumentTransactionEventPolicy {
@@ -18,16 +16,12 @@ public class ChainPolicy extends PolicyArgumentTransactionEventPolicy {
         super(policies);
     }
 
-    public ChainPolicy(int argc, @NonNull Object[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        super(argc, args); // error should be occurred here
-        for (int i = 0; i < argc; i++) {
-            PolicyArgs temp = (PolicyArgs) args[i];
-            policies.add(TransactionPolicyFactory.of(
-                    temp.getPolicyName(),
-                    temp.getArgc(),
-                    temp.getArgs()
-            ));
-        }
+    public ChainPolicy(int argc, @NonNull Object[] args) {
+        super(argc, args);
+    }
+
+    public ChainPolicy(int argc, @NonNull Object[] args, @NonNull Class[] argsType) {
+        super(argc, args, argsType);
     }
 
     @Override

@@ -4,8 +4,12 @@ import com.tuannh.offer.management.commons.condition.Condition;
 import com.tuannh.offer.management.commons.condition.Operator;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
-import com.tuannh.offer.management.domain.policy.event.transaction.demographic.condition.DemographicConditionFactory;
+import com.tuannh.offer.management.domain.policy.event.transaction.demographic.DemographicPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.demographic.condition.CustomerPropertiesCondition;
 import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.fraud.condition.EventBlackListCondition;
+import com.tuannh.offer.management.domain.policy.event.transaction.fraud.condition.UserBlackListCondition;
+import com.tuannh.offer.management.domain.policy.event.transaction.freqcap.FreqCapPolicy;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,17 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings("java:S2925")
 class TransactionPolicyFactoryTest {
     @Test
-    void createFraudPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    void createFraudPolicyTest() {
         // mock policy
         List<String> bannedList = Arrays.asList(
                 "1", "2", "3", "5", "8"
         );
-        TransactionEventPolicy policy = TransactionPolicyFactory.of(
-                "fraud",
-                1,
-                new Object[] {
-                        new FraudPolicy.ConditionArgs("user_condition", 1, new Object[] {bannedList})
-                });
+        TransactionEventPolicy policy = new FraudPolicy(new TransactionEventPolicyCondition[] {
+                new UserBlackListCondition(bannedList)
+        });
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e1", "1", "TEST0", new Date()),
@@ -50,11 +51,7 @@ class TransactionPolicyFactoryTest {
     @Test
     void createFreqCapPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InterruptedException {
         // policy
-        TransactionEventPolicy policy = TransactionPolicyFactory.of(
-                "freq_cap",
-                2,
-                new Object[] {5, 2} // limit 5 transactions / 2s
-        );
+        TransactionEventPolicy policy = new FreqCapPolicy(2, new Object[]{5, 2});
         // data
         long baseTs = System.currentTimeMillis();
         long baseTsAndHalf = baseTs + 500;
@@ -101,40 +98,20 @@ class TransactionPolicyFactoryTest {
     @Test
     void createChainPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         // mock policy
-        TransactionEventPolicy policy = TransactionPolicyFactory.of(
-                "chain",
-                2,
-                new Object[] {new ChainPolicy.PolicyArgs(
-                        "fraud",
-                        2,
-                        new Object[] {
-                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
-                                        "user_condition",
-                                        1,
-                                        new Object[] {Arrays.asList("1", "2", "3")}
-                                ),
-                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
-                                        "event_condition",
-                                        1,
-                                        new Object[] {Arrays.asList("e0", "e1")}
-                                )
+        TransactionEventPolicy policy = new ChainPolicy(new TransactionEventPolicy[] {
+                new FraudPolicy(
+                        new TransactionEventPolicyCondition[] {
+                                new UserBlackListCondition(Arrays.asList("1", "2", "3")),
+                                new EventBlackListCondition(Arrays.asList("e0", "e1"))
                         }
-                ), new ChainPolicy.PolicyArgs(
-                        "fraud",
-                        2,
-                        new Object[] {new ConditionArgumentTransactionEventPolicy.ConditionArgs(
-                                "user_condition",
-                                1,
-                                new Object[] {Arrays.asList("5", "8")}
-                        ),
-                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
-                                        "event_condition",
-                                        1,
-                                        new Object[] {Collections.singletonList("e99")}
-                                )
+                ),
+                new FraudPolicy(
+                        new TransactionEventPolicyCondition[] {
+                                new UserBlackListCondition(Arrays.asList("5", "8")),
+                                new EventBlackListCondition(Collections.singletonList("e99"))
                         }
-                )}
-        );
+                ),
+        });
         // mock data
         TransactionEvent[] events = new TransactionEvent[] {
                 new TransactionEvent("e0", "1", "TEST4", new Date()),
@@ -160,21 +137,16 @@ class TransactionPolicyFactoryTest {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     void createDemographicPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Map<String, Condition> props = new HashMap<>();
         props.put("gender", new Condition(Operator.EQ, "male"));
         props.put("age", new Condition(Operator.GE, 25));
         // is male and age >= 25
-        TransactionEventPolicy policy = TransactionPolicyFactory.of(
-                "demographic",
-                1,
-                new Object[] {
-                    new ConditionArgumentTransactionEventPolicy.ConditionArgs(
-                            "customer_props",
-                            1,
-                            new Object[] {props}
-                    )
+        TransactionEventPolicy policy = new DemographicPolicy(
+                new TransactionEventPolicyCondition[] {
+                        new CustomerPropertiesCondition(props)
                 }
         );
         // mock data

@@ -1,18 +1,20 @@
 package com.tuannh.offer.management.application.repository.giftprogram;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tuannh.offer.management.commons.args.JsonArgs;
 import com.tuannh.offer.management.domain.entity.giftprogram.ProgramPolicy;
 import com.tuannh.offer.management.domain.exception.giftprogram.ProgramPolicyException;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionPolicyFactory;
 import com.tuannh.offer.management.domain.repository.giftprogram.ProgramPolicyRepository;
 import com.tuannh.offer.management.infrastructure.database.entity.TransactionPolicyDbEntity;
 import com.tuannh.offer.management.infrastructure.database.repository.TransactionPolicyDbEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
+
+import static com.tuannh.offer.management.commons.args.JsonArgs.from;
 
 @Slf4j
 @Repository
@@ -31,13 +33,17 @@ public class DefaultProgramPolicyRepository implements ProgramPolicyRepository {
             TransactionPolicyDbEntity entity = optionalEntity.get();
             TransactionEventPolicy policy = null;
             try {
-                policy = TransactionPolicyFactory.ofJsonString(
-                        entity.getPolicyName(),
-                        entity.getNumberOfArguments(),
-                        entity.getArguments()
+                policy = (TransactionEventPolicy) JsonArgs.from(
+                        entity.getSpec()
                 );
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException | JsonProcessingException e) {
-                throw new ProgramPolicyException.CouldNotGetPolicy();
+            } catch (
+                    NoSuchMethodException |
+                    IllegalAccessException |
+                    InvocationTargetException |
+                    InstantiationException |
+                    IOException e
+            ) {
+                throw new ProgramPolicyException.CouldNotGetPolicy(e);
             }
             ret = new ProgramPolicy(id, policy);
         }
