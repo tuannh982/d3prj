@@ -4,7 +4,6 @@ import com.tuannh.offer.management.domain.entity.giftprogram.Program;
 import com.tuannh.offer.management.domain.entity.giftprogram.ProgramFsmState;
 import com.tuannh.offer.management.domain.entity.giftprogram.ProgramPolicy;
 import com.tuannh.offer.management.domain.entity.reward.Reward;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import com.tuannh.offer.management.domain.repository.giftprogram.ProgramRepository;
 import com.tuannh.offer.management.domain.service.interfaces.ProgramService;
 

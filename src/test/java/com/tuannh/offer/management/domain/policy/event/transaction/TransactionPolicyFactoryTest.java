@@ -1,15 +1,15 @@
 package com.tuannh.offer.management.domain.policy.event.transaction;
 
+import com.tuannh.offer.management.commons.condition.Condition;
+import com.tuannh.offer.management.commons.condition.Operator;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.demographic.condition.DemographicConditionFactory;
 import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,8 +42,8 @@ class TransactionPolicyFactoryTest {
         };
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
-            final boolean bx = !bannedList.contains(event.getUserId());
-            assertEquals(b, bx, String.format("wrong evaluation on user %s%n", event.getUserId()));
+            final boolean bx = !bannedList.contains(event.getUser().getUserId());
+            assertEquals(b, bx, String.format("wrong evaluation on user %s%n", event.getUser().getUserId()));
         }
     }
 
@@ -108,12 +108,12 @@ class TransactionPolicyFactoryTest {
                         "fraud",
                         2,
                         new Object[] {
-                                new FraudPolicy.ConditionArgs(
+                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
                                         "user_condition",
                                         1,
                                         new Object[] {Arrays.asList("1", "2", "3")}
                                 ),
-                                new FraudPolicy.ConditionArgs(
+                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
                                         "event_condition",
                                         1,
                                         new Object[] {Arrays.asList("e0", "e1")}
@@ -122,12 +122,12 @@ class TransactionPolicyFactoryTest {
                 ), new ChainPolicy.PolicyArgs(
                         "fraud",
                         2,
-                        new Object[] {new FraudPolicy.ConditionArgs(
+                        new Object[] {new ConditionArgumentTransactionEventPolicy.ConditionArgs(
                                 "user_condition",
                                 1,
                                 new Object[] {Arrays.asList("5", "8")}
                         ),
-                                new FraudPolicy.ConditionArgs(
+                                new ConditionArgumentTransactionEventPolicy.ConditionArgs(
                                         "event_condition",
                                         1,
                                         new Object[] {Collections.singletonList("e99")}
@@ -154,9 +154,63 @@ class TransactionPolicyFactoryTest {
         // process
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
-            final boolean bx = !bannedUsers.contains(event.getUserId());
+            final boolean bx = !bannedUsers.contains(event.getUser().getUserId());
             final boolean by = !bannedEvents.contains(event.getEventName());
-            assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUserId()));
+            assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUser().getUserId()));
         }
     }
+
+    @Test
+    void createDemographicPolicyTest() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Map<String, Condition> props = new HashMap<>();
+        props.put("gender", new Condition(Operator.EQ, "male"));
+        props.put("age", new Condition(Operator.GE, 25));
+        // is male and age >= 25
+        TransactionEventPolicy policy = TransactionPolicyFactory.of(
+                "demographic",
+                1,
+                new Object[] {
+                    new ConditionArgumentTransactionEventPolicy.ConditionArgs(
+                            "customer_props",
+                            1,
+                            new Object[] {props}
+                    )
+                }
+        );
+        // mock data
+        TransactionEvent[] events = new TransactionEvent[] {
+                new TransactionEvent("e0", "1", "TEST4", new Date()),
+                new TransactionEvent("e1", "2", "TEST1", new Date()),
+                new TransactionEvent("e2", "3", "TEST6", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+                new TransactionEvent("e3", "4", "TEST4", new Date()),
+        };
+        // force update data
+        for (TransactionEvent event : events) {
+            event.getUser().setDemographicData(new HashMap<>());
+        }
+        events[0].getUser().getDemographicData().put("gender", "male");
+        events[1].getUser().getDemographicData().put("gender", "female");
+        events[2].getUser().getDemographicData().put("gender", "male");
+        events[3].getUser().getDemographicData().put("gender", "male");
+        events[4].getUser().getDemographicData().put("gender", "male");
+        events[5].getUser().getDemographicData().put("gender", "male");
+
+        events[0].getUser().getDemographicData().put("age", 24);
+        events[1].getUser().getDemographicData().put("age", 25);
+        events[2].getUser().getDemographicData().put("age", 26);
+        events[3].getUser().getDemographicData().put("age", 27);
+        events[4].getUser().getDemographicData().put("age", 28);
+        events[5].getUser().getDemographicData().put("age", 21);
+        for (TransactionEvent event : events) {
+            final boolean b = policy.handle(event);
+            assertEquals(
+                    b,
+                    "male".equals(event.getUser().getDemographicData().get("gender")) &&
+                            25 <= (Integer) event.getUser().getDemographicData().get("age"),
+                    String.format("wrong evaluation on user %s%n", event.getUser().getUserId())
+            );
+        }
+     }
 }

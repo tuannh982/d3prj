@@ -1,5 +1,6 @@
 package com.tuannh.offer.management.domain.event;
 
+import com.tuannh.offer.management.domain.entity.user.Customer;
 import lombok.Getter;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ Thông tin giao dịch bao gồm:
  */
 @Getter
 public class TransactionEvent extends DomainEvent {
-    private final String userId;
+    private final Customer user;
     private final Map<String, Object> properties;
 
     public TransactionEvent(String eventName, String userId, String eventId, Date timestamp) {
@@ -27,6 +28,6 @@ public class TransactionEvent extends DomainEvent {
         properties = new HashMap<>();
         properties.put("timestamp", timestamp);
         properties.put("event_id", eventId);
-        this.userId = userId;
+        this.user = Customer.init(userId);
     }
 }

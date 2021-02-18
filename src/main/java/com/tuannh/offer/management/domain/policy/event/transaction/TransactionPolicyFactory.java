@@ -3,6 +3,7 @@ package com.tuannh.offer.management.domain.policy.event.transaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuannh.offer.management.domain.policy.event.transaction.chain.ChainPolicy;
+import com.tuannh.offer.management.domain.policy.event.transaction.demographic.DemographicPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.fraud.FraudPolicy;
 import com.tuannh.offer.management.domain.policy.event.transaction.freqcap.FreqCapPolicy;
 import lombok.AccessLevel;
@@ -23,7 +24,9 @@ public class TransactionPolicyFactory {
     public enum TransactionPolicyEnum {
         FRAUD("fraud", FraudPolicy.class),
         FREQ_CAP("freq_cap", FreqCapPolicy.class),
-        CHAIN("chain", ChainPolicy.class);
+        CHAIN("chain", ChainPolicy.class),
+        DEMOGRAPHIC("demographic", DemographicPolicy.class);
+
         private final String value;
         private final Class<? extends TransactionEventPolicy> clazz;
 

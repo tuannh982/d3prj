@@ -1,4 +1,4 @@
-package com.tuannh.offer.management.domain.policy.event.transaction.fraud;
+package com.tuannh.offer.management.domain.policy.event.transaction.fraud.condition;
 
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicyCondition;
@@ -14,6 +14,6 @@ public class UserBlackListCondition implements TransactionEventPolicyCondition<T
 
     @Override
     public boolean handle(TransactionEvent data) {
-        return !bannedList.contains(data.getUserId());
+        return !bannedList.contains(data.getUser().getUserId());
     }
 }

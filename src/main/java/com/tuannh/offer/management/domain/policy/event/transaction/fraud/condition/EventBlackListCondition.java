@@ -1,4 +1,4 @@
-package com.tuannh.offer.management.domain.policy.event.transaction.fraud;
+package com.tuannh.offer.management.domain.policy.event.transaction.fraud.condition;
 
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicyCondition;

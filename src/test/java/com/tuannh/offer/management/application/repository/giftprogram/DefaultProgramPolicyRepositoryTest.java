@@ -1,11 +1,9 @@
 package com.tuannh.offer.management.application.repository.giftprogram;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tuannh.offer.management.App;
 import com.tuannh.offer.management.domain.entity.giftprogram.ProgramPolicy;
 import com.tuannh.offer.management.domain.event.TransactionEvent;
 import com.tuannh.offer.management.domain.exception.giftprogram.ProgramPolicyException;
-import com.tuannh.offer.management.domain.policy.event.transaction.TransactionEventPolicy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -54,8 +51,8 @@ public class DefaultProgramPolicyRepositoryTest {
         };
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
-            final boolean bx = !bannedList.contains(event.getUserId());
-            assertEquals(b, bx, String.format("wrong evaluation on user %s%n", event.getUserId()));
+            final boolean bx = !bannedList.contains(event.getUser().getUserId());
+            assertEquals(b, bx, String.format("wrong evaluation on user %s%n", event.getUser().getUserId()));
         }
     }
 
@@ -130,9 +127,9 @@ public class DefaultProgramPolicyRepositoryTest {
         // process
         for (TransactionEvent event : events) {
             final boolean b = policy.handle(event);
-            final boolean bx = !bannedUsers.contains(event.getUserId());
+            final boolean bx = !bannedUsers.contains(event.getUser().getUserId());
             final boolean by = !bannedEvents.contains(event.getEventName());
-            assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUserId()));
+            assertEquals(b, bx && by, String.format("wrong evaluation on user %s%n", event.getUser().getUserId()));
         }
     }
 }
