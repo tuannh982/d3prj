@@ -85,7 +85,8 @@ public class DefaultProgramRepository implements ProgramRepository {
 
     // TODO FIXME
     @Override
-    public List<Program> getProgramsWithinTimeRange(Date from, Date to) {
+    public List<Program> getProgramsWithinTime(Date currentTime) {
+        List<ProgramDbEntity> programDbEntityList = null;
         return null;
     }
 }

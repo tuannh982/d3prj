@@ -11,5 +11,5 @@ public interface ProgramRepository {
     void save(Program program);
     void updateApprovalStatus(String programName, ProgramFsmState newState);
     Program get(String programName) throws ProgramException;
-    List<Program> getProgramsWithinTimeRange(Date from, Date to);
+    List<Program> getProgramsWithinTime(Date currentTime);
 }
